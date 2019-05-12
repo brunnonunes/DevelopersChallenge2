@@ -32,24 +32,18 @@
     <div class="col-md-6">
 
         <table>
-
             @foreach (var item in Model)
             {
                 <tr>
                     <td>
                         @Html.DisplayFor(m => item.DatePosted)
                     </td>
-
-
                     <td>
                         @Html.DisplayFor(m => item.Type)
                     </td>
-
-
                     <td>
                         @Html.DisplayFor(m => item.Amount)
                     </td>
-
                     <td>
                         @Html.DisplayFor(m => item.Description)
                     </td>

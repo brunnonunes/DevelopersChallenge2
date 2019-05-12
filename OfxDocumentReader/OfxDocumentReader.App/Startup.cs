@@ -23,7 +23,7 @@ namespace OfxDocumentReader.App
         {
             services.Configure<TransactionDatabaseSettings>(Configuration.GetSection("TransactionDatabaseSettings"));
 
-            services.AddSingleton<ITransactionDataConnector, TransactionDataConnector>();
+            services.AddSingleton<ITransactionDataConnector, TransactionDataConnector>();            
 
             services.Configure<CookiePolicyOptions>(options =>
             {
