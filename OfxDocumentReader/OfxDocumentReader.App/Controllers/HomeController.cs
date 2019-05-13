@@ -28,7 +28,7 @@ namespace OfxDocumentReader.App.Controllers
             List<TransactionModel> transactionModelList = this._transactionDataBaseConnector.LoadTransactionsByQueryKey(queryKey);
 
             List<TransactionViewModel> transactionViewModelList = new List<TransactionViewModel>();
-
+                       
             foreach (TransactionModel transactionModel in transactionModelList)
             {
                 transactionViewModelList.Add(new TransactionViewModel
