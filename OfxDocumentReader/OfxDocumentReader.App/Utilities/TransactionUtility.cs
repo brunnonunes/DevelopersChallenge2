@@ -3,7 +3,6 @@ using OfxDocumentReader.App.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OfxDocumentReader.App.Utilities
 {
@@ -11,7 +10,7 @@ namespace OfxDocumentReader.App.Utilities
     {
         public TransactionUtility(){}
 
-        public static List<TransactionModel> GetUniqueTransactions(List<IFormFile> files) {
+        public static List<TransactionModel> GetDistinctTransactions(List<IFormFile> files) {
 
             List<string> fileContentList = new List<string>();
 
@@ -25,6 +24,8 @@ namespace OfxDocumentReader.App.Utilities
             List<string> transactionHashList = new List<string>();
 
             TransactionModel transaction = new TransactionModel();
+
+            Guid transactionQueryId = Guid.NewGuid();
 
             foreach (string item in fileContentList)
             {
@@ -64,6 +65,7 @@ namespace OfxDocumentReader.App.Utilities
                     }
 
                     transactionHashList.Add(transactionHash);
+                    transaction.QueryKey = transactionQueryId.ToString();
                     transactionList.Add(transaction);
                     continue;
                 }

@@ -24,7 +24,7 @@ namespace OfxDocumentReader.App.Data
             {
                 try
                 {
-                    connection.Execute("insert into [Transaction] (Type, DatePosted, Amount, Description) values (@Type, @DatePosted, @Amount, @Description)", transactionModel);
+                    connection.Execute("insert into [Transaction] (Type, DatePosted, Amount, Description, QueryKey) values (@Type, @DatePosted, @Amount, @Description, @QueryKey)", transactionModel);
                 }
                 catch (System.Exception ex)
                 {
@@ -48,6 +48,16 @@ namespace OfxDocumentReader.App.Data
             foreach (TransactionModel transaction in transactionModelList)
             {
                 this.SaveTransaction(transaction);
+            }
+        }
+
+        public List<TransactionModel> LoadTransactionsByQueryKey(string QueryKey)
+        {
+            using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
+            {
+                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>("select * from [Transaction] where QueryKey = @QueryKey", new { QueryKey });
+
+                return output.ToList();
             }
         }
     }

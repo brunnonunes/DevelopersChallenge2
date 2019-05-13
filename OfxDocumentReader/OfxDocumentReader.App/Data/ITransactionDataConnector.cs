@@ -1,8 +1,5 @@
 ﻿using OfxDocumentReader.App.DataModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OfxDocumentReader.App.Data
 {
@@ -11,6 +8,8 @@ namespace OfxDocumentReader.App.Data
         void SaveTransaction(TransactionModel transactionModel);
 
         List<TransactionModel> LoadTransactions();
+
+        List<TransactionModel> LoadTransactionsByQueryKey(string Key);
 
         void SaveTransactions(List<TransactionModel> transactionModelList);
     }

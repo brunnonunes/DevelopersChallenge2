@@ -18,10 +18,15 @@ namespace OfxDocumentReader.App.Controllers
             this._transactionDataBaseConnector = transactionDataBaseConnector;
         }
 
-        public IActionResult Index(int transactionQueryId)
+        public IActionResult Index(string queryKey)
         {
-            List<TransactionModel> tmodellist = this._transactionDataBaseConnector.LoadTransactions();
+            if (string.IsNullOrWhiteSpace(queryKey))
+            {
+                return View(new List<TransactionViewModel>());
+            }
 
+            List<TransactionModel> tmodellist = this._transactionDataBaseConnector.LoadTransactionsByQueryKey(queryKey);
+            
             if (!tmodellist.Any())
             {
                 return View(new List<TransactionViewModel>());
@@ -46,11 +51,13 @@ namespace OfxDocumentReader.App.Controllers
         [HttpPost("UploadFiles")]
         public IActionResult UploadFiles(List<IFormFile> files)
         {
-            List<TransactionModel> transactionList = TransactionUtility.GetUniqueTransactions(files);
+            List<TransactionModel> transactionList = TransactionUtility.GetDistinctTransactions(files);
 
             this._transactionDataBaseConnector.SaveTransactions(transactionList);
 
-            return RedirectToAction("Index", new { transactionQueryId = 99 });
+            string queryKey = transactionList.FirstOrDefault().QueryKey;
+
+            return RedirectToAction("Index", new { queryKey });
         }
     }
 }
