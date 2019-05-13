@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace OfxDocumentReader.App.Data
 {
+    /// <summary>
+    /// Class that enables the connection to the database.
+    /// </summary>
     public class TransactionDataConnector : ITransactionDataConnector
     {
         private readonly IOptions<TransactionDatabaseSettings> _transactionDatabaseSettings;
@@ -24,14 +27,7 @@ namespace OfxDocumentReader.App.Data
 
             using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
             {
-                try
-                {
-                    connection.Execute(SAVE_TRANSACTION_QUERY, transactionModel);
-                }
-                catch (System.Exception ex)
-                {
-                    throw;
-                }
+                connection.Execute(SAVE_TRANSACTION_QUERY, transactionModel);
             }
         }
 
@@ -43,13 +39,13 @@ namespace OfxDocumentReader.App.Data
             }
         }
 
-        public List<TransactionModel> LoadTransactionsByQueryKey(string QueryKey)
+        public List<TransactionModel> LoadTransactionsByQueryKey(string queryKey)
         {
             const string LOAD_TRANSACTION_BY_QUERY_KEY = @"select Type, DatePosted, Amount, Description, QueryKey from [Transaction] where QueryKey = @QueryKey";
 
             using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
             {
-                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>(LOAD_TRANSACTION_BY_QUERY_KEY, new { QueryKey });
+                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>(LOAD_TRANSACTION_BY_QUERY_KEY, new { queryKey });
 
                 return output.ToList();
             }

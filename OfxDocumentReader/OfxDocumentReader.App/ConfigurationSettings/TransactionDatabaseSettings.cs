@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OfxDocumentReader.App.ConfigurationSettings
+﻿namespace OfxDocumentReader.App.ConfigurationSettings
 {
     public class TransactionDatabaseSettings
     {

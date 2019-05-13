@@ -4,7 +4,7 @@ using System.Text;
 namespace OfxDocumentReader.App.Utilities
 {
     public static class ExtensionMethods
-    {
+    {    
         private static byte[] GetHash(this string inputString)
         {
             HashAlgorithm algorithm = SHA256.Create();

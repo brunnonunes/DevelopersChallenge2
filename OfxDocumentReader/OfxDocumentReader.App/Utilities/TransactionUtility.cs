@@ -8,13 +8,18 @@ namespace OfxDocumentReader.App.Utilities
 {
     public class TransactionUtility
     {
-        public TransactionUtility(){}
+        public TransactionUtility() { }
 
-        public static List<TransactionModel> GetDistinctTransactions(List<IFormFile> files) {
-
+        /// <summary>
+        /// Method that extracts transaction elements from OFX files. 
+        /// </summary>
+        /// <param name="files">A collection of OFX files</param>
+        /// <returns></returns>
+        public static List<TransactionModel> GetDistinctTransactions(List<IFormFile> files)
+        {
             List<string> fileContentList = new List<string>();
 
-            foreach (var formFile in files)
+            foreach (IFormFile formFile in files)
             {
                 fileContentList.AddRange(OfxFileToStringConverter.Convert(formFile).Split("\r\n").ToList());
             }
@@ -25,7 +30,8 @@ namespace OfxDocumentReader.App.Utilities
 
             TransactionModel transaction = new TransactionModel();
 
-            Guid transactionQueryId = Guid.NewGuid();
+            // Query identifier for this collection
+            Guid transactionQueryKey = Guid.NewGuid();
 
             foreach (string item in fileContentList)
             {
@@ -57,15 +63,17 @@ namespace OfxDocumentReader.App.Utilities
                 {
                     transaction.Description = item.Replace("<MEMO>", "");
 
+                    // Generates Hash to check if the file is a duplicity
                     string transactionHash = transaction.GetHash();
 
+                    // Verification in order to prevent duplicity
                     if (transactionHashList.Contains(transactionHash))
                     {
                         continue;
                     }
 
                     transactionHashList.Add(transactionHash);
-                    transaction.QueryKey = transactionQueryId.ToString();
+                    transaction.QueryKey = transactionQueryKey.ToString();
                     transactionList.Add(transaction);
                     continue;
                 }
