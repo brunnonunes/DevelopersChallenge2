@@ -22,36 +22,41 @@ namespace OfxDocumentReader.App.Controllers
         {
             if (string.IsNullOrWhiteSpace(queryKey))
             {
-                return View(new List<TransactionViewModel>());
+                return View();
             }
 
-            List<TransactionModel> tmodellist = this._transactionDataBaseConnector.LoadTransactionsByQueryKey(queryKey);
-            
-            if (!tmodellist.Any())
-            {
-                return View(new List<TransactionViewModel>());
-            }
+            List<TransactionModel> transactionModelList = this._transactionDataBaseConnector.LoadTransactionsByQueryKey(queryKey);
 
-            List<TransactionViewModel> vmlist = new List<TransactionViewModel>();
+            List<TransactionViewModel> transactionViewModelList = new List<TransactionViewModel>();
 
-            foreach (TransactionModel tm in tmodellist)
+            foreach (TransactionModel transactionModel in transactionModelList)
             {
-                vmlist.Add(new TransactionViewModel
+                transactionViewModelList.Add(new TransactionViewModel
                 {
-                    Amount = tm.Amount,
-                    DatePosted = tm.DatePosted,
-                    Description = tm.Description,
-                    Type = tm.Type
+                    Amount = transactionModel.Amount,
+                    DatePosted = transactionModel.DatePosted,
+                    Description = transactionModel.Description,
+                    Type = transactionModel.Type
                 });
             }
 
-            return View(vmlist);
+            return View(transactionViewModelList);
         }
 
         [HttpPost("UploadFiles")]
         public IActionResult UploadFiles(List<IFormFile> files)
         {
+            if (!OfxFileValidator.Validate(files))
+            {
+                return View("Index");
+            }
+
             List<TransactionModel> transactionList = TransactionUtility.GetDistinctTransactions(files);
+
+            if (!transactionList.Any())
+            {
+                return RedirectToAction("Index");
+            }
 
             this._transactionDataBaseConnector.SaveTransactions(transactionList);
 
