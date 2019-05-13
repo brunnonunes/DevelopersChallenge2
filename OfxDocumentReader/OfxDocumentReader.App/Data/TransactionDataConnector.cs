@@ -20,26 +20,18 @@ namespace OfxDocumentReader.App.Data
 
         public void SaveTransaction(TransactionModel transactionModel)
         {
+            const string SAVE_TRANSACTION_QUERY = @"insert into [Transaction] (Type, DatePosted, Amount, Description, QueryKey) values (@Type, @DatePosted, @Amount, @Description, @QueryKey)";
+
             using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
             {
                 try
                 {
-                    connection.Execute("insert into [Transaction] (Type, DatePosted, Amount, Description, QueryKey) values (@Type, @DatePosted, @Amount, @Description, @QueryKey)", transactionModel);
+                    connection.Execute(SAVE_TRANSACTION_QUERY, transactionModel);
                 }
                 catch (System.Exception ex)
                 {
                     throw;
                 }
-            }
-        }
-
-        public List<TransactionModel> LoadTransactions()
-        {
-            using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
-            {
-                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>("select * from [Transaction]", new DynamicParameters());
-
-                return output.ToList();
             }
         }
 
@@ -53,9 +45,11 @@ namespace OfxDocumentReader.App.Data
 
         public List<TransactionModel> LoadTransactionsByQueryKey(string QueryKey)
         {
+            const string LOAD_TRANSACTION_BY_QUERY_KEY = @"select Type, DatePosted, Amount, Description, QueryKey from [Transaction] where QueryKey = @QueryKey";
+
             using (IDbConnection connection = new SQLiteConnection(_transactionDatabaseSettings.Value.DefaultConnection))
             {
-                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>("select * from [Transaction] where QueryKey = @QueryKey", new { QueryKey });
+                IEnumerable<TransactionModel> output = connection.Query<TransactionModel>(LOAD_TRANSACTION_BY_QUERY_KEY, new { QueryKey });
 
                 return output.ToList();
             }

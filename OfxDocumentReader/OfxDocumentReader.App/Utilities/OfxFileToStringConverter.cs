@@ -13,20 +13,27 @@ namespace OfxDocumentReader.App.Utilities
         {
             string fileContent = string.Empty;
 
-            // full path to file in temp location
-            string filePath = Path.GetTempFileName();
-
-            if (file.Length > 0)
+            try
             {
-                using (FileStream stream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyToAsync(stream);
-                }
+                // full path to file in temp location
+                string filePath = Path.GetTempFileName();
 
-                using (StreamReader reader = new StreamReader(file.OpenReadStream()))
+                if (file.Length > 0)
                 {
-                    fileContent = reader.ReadToEnd();
+                    using (FileStream stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream);
+                    }
+
+                    using (StreamReader reader = new StreamReader(file.OpenReadStream()))
+                    {
+                        fileContent = reader.ReadToEnd();
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
             return fileContent;

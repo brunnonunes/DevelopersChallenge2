@@ -52,7 +52,7 @@ namespace OfxDocumentReader.App.Controllers
             }
 
             List<TransactionModel> transactionList = TransactionUtility.GetDistinctTransactions(files);
-
+            
             if (!transactionList.Any())
             {
                 return RedirectToAction("Index");

@@ -7,8 +7,6 @@ namespace OfxDocumentReader.App.Data
     {
         void SaveTransaction(TransactionModel transactionModel);
 
-        List<TransactionModel> LoadTransactions();
-
         List<TransactionModel> LoadTransactionsByQueryKey(string Key);
 
         void SaveTransactions(List<TransactionModel> transactionModelList);
