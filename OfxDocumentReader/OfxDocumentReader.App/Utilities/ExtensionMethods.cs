@@ -4,7 +4,7 @@ using System.Text;
 namespace OfxDocumentReader.App.Utilities
 {
     public static class ExtensionMethods
-    {    
+    {
         private static byte[] GetHash(this string inputString)
         {
             HashAlgorithm algorithm = SHA256.Create();
@@ -18,6 +18,19 @@ namespace OfxDocumentReader.App.Utilities
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
+        }
+
+        public static string FormatDate(this string inputString)
+        {
+            string year = inputString.Substring(0, 4);
+
+            string month = inputString.Substring(4, 2);
+
+            string day = inputString.Substring(6, 2);
+
+            string date = $"{day}/{month}/{year}";
+
+            return date;
         }
     }
 }

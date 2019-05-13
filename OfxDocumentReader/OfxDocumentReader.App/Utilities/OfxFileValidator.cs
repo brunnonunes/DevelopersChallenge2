@@ -18,9 +18,7 @@ namespace OfxDocumentReader.App.Utilities
                 {
                     return false;
                 }
-            }
-
-            // TODO: Implement other possible validations
+            }            
 
             return true;
         }

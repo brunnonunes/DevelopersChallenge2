@@ -28,13 +28,13 @@ namespace OfxDocumentReader.App.Controllers
             List<TransactionModel> transactionModelList = this._transactionDataBaseConnector.LoadTransactionsByQueryKey(queryKey);
 
             List<TransactionViewModel> transactionViewModelList = new List<TransactionViewModel>();
-                       
+
             foreach (TransactionModel transactionModel in transactionModelList)
             {
                 transactionViewModelList.Add(new TransactionViewModel
                 {
                     Amount = transactionModel.Amount,
-                    DatePosted = transactionModel.DatePosted,
+                    DatePosted = transactionModel.DatePosted.FormatDate(),
                     Description = transactionModel.Description,
                     Type = transactionModel.Type
                 });
@@ -48,11 +48,11 @@ namespace OfxDocumentReader.App.Controllers
         {
             if (!OfxFileValidator.Validate(files))
             {
-                return View("Index");
+                return RedirectToAction("Index");
             }
 
             List<TransactionModel> transactionList = TransactionUtility.GetDistinctTransactions(files);
-            
+
             if (!transactionList.Any())
             {
                 return RedirectToAction("Index");
